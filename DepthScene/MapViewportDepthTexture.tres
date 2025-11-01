@@ -1,0 +1,4 @@
+[gd_resource type="ViewportTexture" format=3 uid="uid://df8ug8fs3f8ej"]
+
+[resource]
+viewport_path = NodePath("SubViewportContainer/MapViewport")

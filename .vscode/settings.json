@@ -1,0 +1,9 @@
+{
+  "editor.defaultFormatter": "geequlim.godot-tools",
+  "editor.formatOnSave": true,
+  "godotTools.editorPath.godot4": "/Applications/Godot_mono.app/Contents/MacOS/Godot",
+  "godotTools.formatter.denseFunctionParameters": true,
+  "[gdscript]": {
+    "editor.defaultFormatter": "geequlim.godot-tools"
+  }
+}

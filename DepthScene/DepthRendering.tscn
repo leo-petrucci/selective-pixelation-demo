@@ -1,0 +1,111 @@
+[gd_scene load_steps=14 format=3 uid="uid://cvgcrpwcoekg6"]
+
+[ext_resource type="Script" uid="uid://ctf16yxdufstx" path="res://DepthScene/MainViewportComposite.gd" id="1_ahf6g"]
+[ext_resource type="Script" uid="uid://ddoab2cudw5js" path="res://DepthScene/SubViewportDepthCapture.gd" id="1_qjbd2"]
+[ext_resource type="Resource" uid="uid://cajtshov1yibc" path="res://DepthScene/MapViewportDepthBuffer.tres" id="2_30q2c"]
+
+[sub_resource type="CompositorEffect" id="CompositorEffect_bagkc"]
+resource_local_to_scene = true
+resource_name = ""
+enabled = true
+effect_callback_type = 4
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("1_ahf6g")
+shared_depth = ExtResource("2_30q2c")
+metadata/_custom_type_script = "uid://ctf16yxdufstx"
+
+[sub_resource type="Compositor" id="Compositor_xuqam"]
+compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_bagkc")])
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uopu5"]
+render_priority = 1
+transparency = 1
+albedo_color = Color(0.99718195, 0.5719351, 0.6343763, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_konoi"]
+material = SubResource("StandardMaterial3D_uopu5")
+
+[sub_resource type="Environment" id="Environment_f0oaa"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_hthu2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cwq4j"]
+albedo_color = Color(0.32231408, 0.5529002, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_qxvj5"]
+material = SubResource("StandardMaterial3D_cwq4j")
+
+[sub_resource type="CompositorEffect" id="CompositorEffect_ahf6g"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = true
+effect_callback_type = 3
+access_resolved_color = true
+access_resolved_depth = true
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("1_qjbd2")
+shared_buffer = ExtResource("2_30q2c")
+metadata/_custom_type_script = "uid://ddoab2cudw5js"
+
+[sub_resource type="Compositor" id="Compositor_30q2c"]
+compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_ahf6g")])
+
+[node name="DepthScene" type="Node3D"]
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(0.67815965, 0.36188927, -0.6396371, 0, 0.87035567, 0.49242356, 0.7349146, -0.3339418, 0.5902401, -5.236, 5.112, 5.294)
+cull_mask = 2
+compositor = SubResource("Compositor_xuqam")
+projection = 1
+current = true
+size = 11.67
+near = 0.621
+far = 3919.4
+
+[node name="NormalCube" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7207558, 0.48088872, -1.3000727)
+layers = 2
+mesh = SubResource("BoxMesh_konoi")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_f0oaa")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.9599521, 0.21103461, -0.18427242, 0, 0.6577303, 0.7532535, 0.28016412, -0.7230873, 0.63138956, 0, 0, 0)
+layers = 2147483647
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="MapViewport" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 0
+
+[node name="Floor" type="MeshInstance3D" parent="SubViewportContainer/MapViewport"]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+mesh = SubResource("PlaneMesh_hthu2")
+skeleton = NodePath("../../..")
+
+[node name="PixelCube" type="MeshInstance3D" parent="SubViewportContainer/MapViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.099, 0.481, -0.989)
+mesh = SubResource("BoxMesh_qxvj5")
+skeleton = NodePath("../../..")
+
+[node name="Camera" type="Camera3D" parent="SubViewportContainer/MapViewport"]
+transform = Transform3D(0.67815965, 0.36188927, -0.6396371, 0, 0.87035567, 0.49242356, 0.7349146, -0.3339418, 0.5902401, -5.236, 5.112, 5.294)
+cull_mask = 1
+compositor = SubResource("Compositor_30q2c")
+projection = 1
+current = true
+size = 11.67
+near = 0.621
+far = 3919.4
