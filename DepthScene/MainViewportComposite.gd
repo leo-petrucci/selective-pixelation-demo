@@ -62,7 +62,7 @@ void main() {
 """;
 
 func _init() -> void:
-        effect_callback_type = EFFECT_CALLBACK_TYPE_PRE_TRANSPARENT
+        effect_callback_type = EFFECT_CALLBACK_TYPE_POST_TRANSPARENT
         access_resolved_depth = true
         access_resolved_color = true
         rd = RenderingServer.get_rendering_device()
