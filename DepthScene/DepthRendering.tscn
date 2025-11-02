@@ -1,14 +1,17 @@
-[gd_scene load_steps=14 format=3 uid="uid://cvgcrpwcoekg6"]
+[gd_scene load_steps=15 format=3 uid="uid://cvgcrpwcoekg6"]
 
 [ext_resource type="Script" uid="uid://ctf16yxdufstx" path="res://DepthScene/MainViewportComposite.gd" id="1_ahf6g"]
 [ext_resource type="Script" uid="uid://ddoab2cudw5js" path="res://DepthScene/SubViewportDepthCapture.gd" id="1_qjbd2"]
 [ext_resource type="Resource" uid="uid://cajtshov1yibc" path="res://DepthScene/MapViewportDepthBuffer.tres" id="2_30q2c"]
+[ext_resource type="Script" uid="uid://cmnxxt0wl77qn" path="res://DepthScene/SubViewportRendering.gd" id="3_hbeyy"]
 
 [sub_resource type="CompositorEffect" id="CompositorEffect_bagkc"]
 resource_local_to_scene = true
 resource_name = ""
 enabled = true
-effect_callback_type = 4
+effect_callback_type = 3
+access_resolved_color = true
+access_resolved_depth = true
 needs_motion_vectors = false
 needs_normal_roughness = false
 script = ExtResource("1_ahf6g")
@@ -20,7 +23,6 @@ compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_bagk
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uopu5"]
 render_priority = 1
-transparency = 1
 albedo_color = Color(0.99718195, 0.5719351, 0.6343763, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_konoi"]
@@ -88,7 +90,8 @@ stretch = true
 [node name="MapViewport" type="SubViewport" parent="SubViewportContainer"]
 handle_input_locally = false
 size = Vector2i(1152, 648)
-render_target_update_mode = 0
+render_target_update_mode = 4
+script = ExtResource("3_hbeyy")
 
 [node name="Floor" type="MeshInstance3D" parent="SubViewportContainer/MapViewport"]
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
