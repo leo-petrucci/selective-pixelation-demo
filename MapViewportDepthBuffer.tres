@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="SharedDepthBuffer" load_steps=2 format=3 uid="uid://d1pjpkadretpj"]
+[gd_resource type="Resource" script_class="SharedDepthBuffer" load_steps=2 format=3 uid="uid://bqwrrjyevld6j"]
 
 [ext_resource type="Script" uid="uid://bmgok6nleffv" path="res://DepthScene/SharedDepthBuffer.gd" id="1_ldm6e"]
 
