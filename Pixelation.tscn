@@ -7,6 +7,28 @@
 [ext_resource type="Script" uid="uid://3skkdvu2ys6b" path="res://PixelateStylizerEffect.gd" id="3_uopu5"]
 [ext_resource type="Script" uid="uid://ddoab2cudw5js" path="res://DepthScene/SubViewportDepthCapture.gd" id="6_f0oaa"]
 
+[sub_resource type="CompositorEffect" id="CompositorEffect_cwq4j"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = true
+effect_callback_type = 4
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("1_u6uiu")
+metadata/_custom_type_script = "uid://cr36k2ihhlwoo"
+
+[sub_resource type="CompositorEffect" id="CompositorEffect_73hu7"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = false
+effect_callback_type = 3
+access_resolved_color = false
+access_resolved_depth = false
+needs_motion_vectors = false
+needs_normal_roughness = true
+script = ExtResource("3_uopu5")
+metadata/_custom_type_script = "uid://3skkdvu2ys6b"
+
 [sub_resource type="CompositorEffect" id="CompositorEffect_hthu2"]
 resource_local_to_scene = false
 resource_name = ""
@@ -19,16 +41,7 @@ shared_depth = ExtResource("2_konoi")
 metadata/_custom_type_script = "uid://ctf16yxdufstx"
 
 [sub_resource type="Compositor" id="Compositor_cwq4j"]
-compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_hthu2")])
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uopu5"]
-render_priority = 1
-albedo_color = Color(0.99718195, 0.5719351, 0.6343763, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_konoi"]
-material = SubResource("StandardMaterial3D_uopu5")
-
-[sub_resource type="Environment" id="Environment_f0oaa"]
+compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_cwq4j"), SubResource("CompositorEffect_73hu7"), SubResource("CompositorEffect_hthu2")])
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_hthu2"]
 
@@ -38,30 +51,13 @@ albedo_color = Color(0.32231408, 0.5529002, 1, 1)
 [sub_resource type="BoxMesh" id="BoxMesh_qxvj5"]
 material = SubResource("StandardMaterial3D_cwq4j")
 
-[sub_resource type="CompositorEffect" id="CompositorEffect_uopu5"]
-resource_local_to_scene = false
-resource_name = ""
-enabled = true
-effect_callback_type = 4
-needs_motion_vectors = false
-needs_normal_roughness = false
-script = ExtResource("1_u6uiu")
-metadata/_custom_type_script = "uid://qhx6ryp57xon"
+[sub_resource type="Environment" id="Environment_f0oaa"]
 
-[sub_resource type="CompositorEffect" id="CompositorEffect_u6uiu"]
-resource_local_to_scene = false
-resource_name = ""
-enabled = false
-effect_callback_type = 3
-access_resolved_color = false
-access_resolved_depth = false
-needs_motion_vectors = false
-needs_normal_roughness = true
-script = ExtResource("3_uopu5")
-shadow_strength = 1.0
-highlight_strength = 1.0
-edge_thickness = 4.0
-metadata/_custom_type_script = "uid://c7nuq0uqn17pe"
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uopu5"]
+albedo_color = Color(0.99718195, 0.5719351, 0.6343763, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_konoi"]
+material = SubResource("StandardMaterial3D_uopu5")
 
 [sub_resource type="CompositorEffect" id="CompositorEffect_konoi"]
 resource_local_to_scene = false
@@ -75,13 +71,13 @@ shared_buffer = ExtResource("2_konoi")
 metadata/_custom_type_script = "uid://ddoab2cudw5js"
 
 [sub_resource type="Compositor" id="Compositor_afcaj"]
-compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_uopu5"), SubResource("CompositorEffect_u6uiu"), SubResource("CompositorEffect_konoi")])
+compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_konoi")])
 
 [node name="Pixelation" type="Node3D"]
 
 [node name="Camera" type="Camera3D" parent="."]
 transform = Transform3D(0.67815965, 0.36188927, -0.6396371, 0, 0.87035567, 0.49242356, 0.7349146, -0.3339418, 0.5902401, -5.236, 5.112, 5.294)
-cull_mask = 2
+cull_mask = 1
 compositor = SubResource("Compositor_cwq4j")
 projection = 1
 current = true
@@ -89,16 +85,27 @@ size = 11.67
 near = 0.621
 far = 3919.4
 
-[node name="NormalCube" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7207558, 0.48088872, -1.3000727)
-layers = 2
-mesh = SubResource("BoxMesh_konoi")
+[node name="Floor" type="MeshInstance3D" parent="."]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+mesh = SubResource("PlaneMesh_hthu2")
+
+[node name="PixelCube" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.51749635, 0.481, 0.5756538)
+mesh = SubResource("BoxMesh_qxvj5")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_f0oaa")
 
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(0.9599521, 0.21103461, -0.18427242, 0, 0.6577303, 0.7532535, 0.28016412, -0.7230873, 0.63138956, 0.18488288, 1.6680105, 3.0516787)
+layers = 2147483647
+shadow_enabled = true
+omni_range = 55.236
+omni_attenuation = 0.091
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.9599521, 0.21103461, -0.18427242, 0, 0.6577303, 0.7532535, 0.28016412, -0.7230873, 0.63138956, 0, 0, 0)
+visible = false
 layers = 2147483647
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
@@ -110,28 +117,24 @@ grow_horizontal = 2
 grow_vertical = 2
 stretch = true
 
-[node name="MapViewport" type="SubViewport" parent="SubViewportContainer"]
+[node name="NonPixelatedViewport" type="SubViewport" parent="SubViewportContainer"]
 handle_input_locally = false
 size = Vector2i(1152, 648)
 render_target_update_mode = 0
 script = ExtResource("3_73hu7")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/MapViewport"]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/NonPixelatedViewport"]
 environment = SubResource("Environment_f0oaa")
 
-[node name="Floor" type="MeshInstance3D" parent="SubViewportContainer/MapViewport"]
-transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
-mesh = SubResource("PlaneMesh_hthu2")
+[node name="NormalCube" type="MeshInstance3D" parent="SubViewportContainer/NonPixelatedViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0195042, 0.4808885, -0.9262388)
+layers = 2
+mesh = SubResource("BoxMesh_konoi")
 skeleton = NodePath("../../..")
 
-[node name="PixelCube" type="MeshInstance3D" parent="SubViewportContainer/MapViewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.099, 0.481, -0.989)
-mesh = SubResource("BoxMesh_qxvj5")
-skeleton = NodePath("../../..")
-
-[node name="Camera" type="Camera3D" parent="SubViewportContainer/MapViewport"]
+[node name="Camera" type="Camera3D" parent="SubViewportContainer/NonPixelatedViewport"]
 transform = Transform3D(0.67815965, 0.36188927, -0.6396371, 0, 0.87035567, 0.49242356, 0.7349146, -0.3339418, 0.5902401, -5.236, 5.112, 5.294)
-cull_mask = 1
+cull_mask = 2
 compositor = SubResource("Compositor_afcaj")
 projection = 1
 current = true
